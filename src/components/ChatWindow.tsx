@@ -16,19 +16,24 @@ export function ChatWindow({ messages, streamingContent, isStreaming }: ChatWind
     
     const lastMessage = messages[messages.length - 1];
     if (lastMessage.role === 'user') {
-      // Delay slightly to ensure DOM has painted the new message
-      setTimeout(() => {
+      const scrollUserMessageToTop = () => {
         const userMessageEl = document.getElementById(`message-${messages.length - 1}`);
-        if (userMessageEl) {
-          userMessageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const container = userMessageEl?.closest('.overflow-y-auto');
+        if (userMessageEl && container) {
+          // Precisely calculate the top position minus a 24px (1.5rem) breathing gap
+          container.scrollTo({
+            top: userMessageEl.offsetTop - 16,
+            behavior: 'smooth'
+          });
         }
-      }, 50);
+      };
+      setTimeout(scrollUserMessageToTop, 50);
     }
   }, [messages.length]); 
 
   return (
     <div 
-      className="flex-1 overflow-y-auto py-4 space-y-4 pb-[80vh]"
+      className="flex-1 overflow-y-auto py-4 space-y-4 pb-[80vh] relative"
       style={{ overflowAnchor: 'none' }}
     >
       {messages.map((msg, i) => (
