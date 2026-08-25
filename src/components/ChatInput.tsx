@@ -58,7 +58,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
           placeholder={placeholder || "Ask The Cinephile anything..."}
           rows={1}
           maxLength={4000}
-          className="flex-1 resize-none bg-surface border border-border rounded-xl px-4 py-3 text-[15px] text-text-primary placeholder:text-text-secondary/60 focus:outline-none focus:border-accent-dim transition-colors duration-200 disabled:opacity-50 overflow-hidden"
+          className="flex-1 resize-none bg-surface border border-border rounded-xl px-4 py-3 text-base text-text-primary placeholder:text-text-secondary/60 focus:outline-none focus:border-accent-dim transition-colors duration-200 disabled:opacity-50 overflow-hidden"
           aria-label="Type your message"
         />
         <button
