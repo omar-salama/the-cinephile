@@ -1,0 +1,14 @@
+name = "the-cinephile"
+compatibility_date = "2026-08-01"
+# pages_build_output_dir = "dist"
+
+[ai]
+binding = "AI"
+
+[[ratelimits]]
+name = "CHAT_RATE_LIMITER"
+namespace_id = "1001"
+
+[ratelimits.simple]
+limit = 10
+period = 60
