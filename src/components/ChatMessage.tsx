@@ -2,14 +2,17 @@ interface ChatMessageProps {
   role: 'user' | 'assistant';
   content: string;
   isStreaming?: boolean;
+  id?: string;
+  animate?: boolean;
 }
 
-export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
+export function ChatMessage({ role, content, isStreaming, id, animate = true }: ChatMessageProps) {
   const isUser = role === 'user';
 
   return (
     <div
-      className={`animate-message-in flex ${isUser ? 'justify-end' : 'justify-start'} px-4`}
+      id={id}
+      className={`${animate ? 'animate-message-in' : ''} flex ${isUser ? 'justify-end' : 'justify-start'} px-4 scroll-mt-5`}
     >
       <div
         className={`max-w-[95%] sm:max-w-[75%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed ${

@@ -10,17 +10,35 @@ interface ChatWindowProps {
 }
 
 export function ChatWindow({ messages, streamingContent, isStreaming }: ChatWindowProps) {
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  // Auto-scroll to bottom on new messages or streaming content
+  // Only scroll when the user sends a new message
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, streamingContent]);
+    if (messages.length === 0) return;
+    
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.role === 'user') {
+      // Delay slightly to ensure DOM has painted the new message
+      setTimeout(() => {
+        const userMessageEl = document.getElementById(`message-${messages.length - 1}`);
+        if (userMessageEl) {
+          userMessageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 50);
+    }
+  }, [messages.length]); 
 
   return (
-    <div className="flex-1 overflow-y-auto py-4 space-y-4">
+    <div 
+      className="flex-1 overflow-y-auto py-4 space-y-4 pb-[80vh]"
+      style={{ overflowAnchor: 'none' }}
+    >
       {messages.map((msg, i) => (
-        <ChatMessage key={i} role={msg.role} content={msg.content} />
+        <ChatMessage 
+          key={i} 
+          id={`message-${i}`} 
+          role={msg.role} 
+          content={msg.content} 
+          animate={msg.role === 'user'} 
+        />
       ))}
       {isStreaming && streamingContent && (
         <ChatMessage role="assistant" content={streamingContent} isStreaming />
@@ -28,7 +46,6 @@ export function ChatWindow({ messages, streamingContent, isStreaming }: ChatWind
       {isStreaming && !streamingContent && (
         <StreamingIndicator />
       )}
-      <div ref={bottomRef} />
     </div>
   );
 }
