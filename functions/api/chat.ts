@@ -64,7 +64,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
   // --- Call Workers AI ---
   try {
-    const stream = await env.AI.run('@cf/meta/llama-3.1-70b-instruct', {
+    const stream = await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fp8-fast', {
       messages: aiMessages,
       stream: true,
     });
