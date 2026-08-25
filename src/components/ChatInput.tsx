@@ -14,6 +14,13 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
   useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;
+    
+    if (input === '') {
+      el.style.height = ''; // Let CSS and rows=1 handle initial height
+      el.style.overflowY = 'hidden';
+      return;
+    }
+    
     el.style.height = 'auto';
     el.style.height = Math.min(el.scrollHeight, 160) + 'px';
     el.style.overflowY = el.scrollHeight > 160 ? 'auto' : 'hidden';
@@ -34,7 +41,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
     setInput('');
     // Reset height and scrollbar
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = '';
       textareaRef.current.style.overflowY = 'hidden';
     }
   };
