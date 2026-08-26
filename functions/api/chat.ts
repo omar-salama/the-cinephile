@@ -12,7 +12,7 @@ interface Env {
   };
 }
 
-const MODEL = '@cf/meta/llama-3-8b-instruct';
+const MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct';
 
 export const onRequestPost: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
@@ -64,7 +64,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
   // --- Call Workers AI ---
   try {
-    const stream = await env.AI.run('@cf/meta/llama-3.1-8b-instruct-fp8-fast', {
+    const stream = await env.AI.run(MODEL, {
       messages: aiMessages,
       stream: true,
     });
@@ -82,8 +82,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const message = err instanceof Error ? err.message : String(err);
     console.error('Workers AI error:', message);
 
-    // Check for quota exhaustion
-    if (message.includes('exceeded') || message.includes('quota') || message.includes('4006') || message.includes('3036')) {
+    // Check for neuron quota exhaustion — only match specific Workers AI error codes
+    // 3036 = "neurons budget exceeded", 4006 = "model neurons limit reached"
+    if (message.includes('3036') || message.includes('4006') || message.includes('neurons')) {
       return characterErrorResponse('exhausted', { exhausted: true });
     }
 
